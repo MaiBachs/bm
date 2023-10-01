@@ -1,8 +1,7 @@
 import React from "react";
-import "./Sidebar.scss"
 
 function Sidebar() {
-  return <div>Bach</div>;
+  return <div>Bach 1000000</div>;
 }
 
 export default Sidebar;
