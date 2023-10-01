@@ -1,6 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import MainLayout from "./component/MainLayout";
-import Sidebar from "./component/Sidebar";
+
+import DefaultLayout from "./layout/DefaultLayout";
 
 export default function useRoutesElements() {
   const routeElements = useRoutes([
@@ -8,7 +9,7 @@ export default function useRoutesElements() {
       path: "/",
       element: (
         <MainLayout>
-          <Sidebar />
+          <DefaultLayout />
         </MainLayout>
       ),
     },
