@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router-dom";
-import MainLayout from "./component/MainLayout";
+import MainLayout from "./layout/MainLayout";
 import Sidebar from "./component/Sidebar";
 
 export default function useRoutesElements() {
@@ -8,7 +8,6 @@ export default function useRoutesElements() {
       path: "/",
       element: (
         <MainLayout>
-          <Sidebar />
         </MainLayout>
       ),
     },

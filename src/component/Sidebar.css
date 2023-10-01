@@ -1,0 +1,9 @@
+.wrapper{
+    width: 300px;
+    height: 100vh;
+    background-color: #007700;
+}
+.title{
+    color: white;
+    background-color: #00AA00;
+}

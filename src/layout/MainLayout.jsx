@@ -1,9 +1,10 @@
 import React from "react";
+import Sidebar from "../component/Sidebar";
 
 export default function MainLayout({ children }) {
   return (
     <div>
-      MainLayout
+      <Sidebar/>
       {children}
     </div>
   );
