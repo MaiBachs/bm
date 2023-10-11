@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div className="mx-1 p-1  bg-red-200">
+    <div className="p-1   bg-red-200">
       <Link to="/" className="flex items-center my-2 gap-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
