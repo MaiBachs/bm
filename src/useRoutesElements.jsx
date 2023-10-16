@@ -5,6 +5,9 @@ import Card from "./page/Card";
 import InterbankTransactions from "./page/InterbankTransactions";
 import InternalTransactions from "./page/InternalTransactions";
 import StockChart from "./page/StockChart";
+import Header from "./component/Header";
+import Login from "./page/Login";
+import Register from "./page/Register";
 
 export default function useRoutesElements() {
   const routeElements = useRoutes([
@@ -46,6 +49,22 @@ export default function useRoutesElements() {
         <DefaultLayout>
           <StockChart />
         </DefaultLayout>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <Header>
+          <Login />
+        </Header>
+      ),
+    },
+    {
+      path: "/register",
+      element: (
+        <Header>
+          <Register />
+        </Header>
       ),
     },
   ]);
