@@ -2,8 +2,6 @@ import { useRoutes } from "react-router-dom";
 import DefaultLayout from "./layout/DefaultLayout";
 import Home from "./page/Home";
 import Card from "./page/Card";
-import InterbankTransactions from "./page/InterbankTransactions";
-import InternalTransactions from "./page/InternalTransactions";
 import StockChart from "./page/StockChart";
 import Header from "./component/Header";
 import Login from "./page/Login";
@@ -27,22 +25,7 @@ export default function useRoutesElements() {
         </DefaultLayout>
       ),
     },
-    {
-      path: "/interbanktransactions",
-      element: (
-        <DefaultLayout>
-          <InterbankTransactions />
-        </DefaultLayout>
-      ),
-    },
-    {
-      path: "/internaltransactions",
-      element: (
-        <DefaultLayout>
-          <InternalTransactions />
-        </DefaultLayout>
-      ),
-    },
+
     {
       path: "/stockchart",
       element: (
