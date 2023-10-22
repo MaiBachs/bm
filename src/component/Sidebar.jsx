@@ -23,7 +23,7 @@ function Sidebar() {
       </Link>
 
       <div className="bg-gray-100/60 h-[0.05rem] mt-1"></div>
-      <Link className="flex items-center my-2 gap-3" to="/stockchart">
+      <Link to="/interest" className="flex items-center my-2 gap-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
