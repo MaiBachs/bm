@@ -72,7 +72,10 @@ function Interest() {
         const usecf  = window.confirm("Bạn có chắc chắn xóa");
         if(usecf === true){
             axios.delete("http://localhost:8084/api/loan/delete-interest",{data:{id: id}}).then((response)=>{
-                toast("Delete success");
+                toast.success('Delete success', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 2000,
+                });
                 setCheckRefesh(!checkRefesh)
             }).catch((error)=>{
                 console.log(error);
@@ -85,7 +88,10 @@ function Interest() {
         console.log(addIt);
         if(addIt.term > 0 && addIt.percent > 0){
             axios.post("http://localhost:8084/api/loan/set-interest", {...addIt}).then((response)=>{
-                toast.success("Add success");
+                toast.success('Add success', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 2000,
+                });
                 setCheckRefesh(!checkRefesh)
                 closeModalAdd()
                 closeModal()
@@ -116,6 +122,7 @@ function Interest() {
 
 
     return <div>
+        <ToastContainer />
         <div className="header-loan">
         <Link className="loan">Interest</Link>
         <Link className="loan" to="/customer-loan">Customer loan</Link>
