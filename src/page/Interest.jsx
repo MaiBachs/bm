@@ -43,11 +43,18 @@ function Interest() {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [modalIsOpenAdd, setIsOpenAdd] = React.useState(false);
 
-    function openModal() {
+    function openModal(i) {
         setIsOpen(true);
+        setAddIt(i);
     }
     function openModalAdd() {
         setIsOpenAdd(true);
+        setAddIt({
+            id: null,
+            term: number,
+            type: 1,
+            percent: number
+        })
     }
     function afterOpenModal() {
         // references are now sync'd and can be accessed.
@@ -76,13 +83,18 @@ function Interest() {
 
     const handelSave=()=>{
         console.log(addIt);
-        axios.post("http://localhost:8084/api/loan/set-interest", {...addIt}).then((response)=>{
-            toast.success("Add success");
-            setCheckRefesh(!checkRefesh)
-            closeModalAdd()
-        }).catch((error)=>{
-            console.log(error);
-        })
+        if(addIt.term > 0 && addIt.percent > 0){
+            axios.post("http://localhost:8084/api/loan/set-interest", {...addIt}).then((response)=>{
+                toast.success("Add success");
+                setCheckRefesh(!checkRefesh)
+                closeModalAdd()
+                closeModal()
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }else{
+            alert("Term và percent không hợp lệ")
+        }
     }
 
     useEffect(()=>{
@@ -101,6 +113,7 @@ function Interest() {
     const handleInputPercentChange = (event) => {
         setAddIt({ ...addIt, percent: Number(event.target.value) });
     };
+
 
     return <div>
         <div className="header-loan">
@@ -126,7 +139,7 @@ function Interest() {
                         <td>{index}</td>
                         <td>{i.term}</td>
                         <td>{i.percent}</td>
-                        <td><FiEdit className="fi-edit" onClick={openModal}/></td>
+                        <td><FiEdit className="fi-edit" onClick={()=>{openModal(i)}}/></td>
                         <Modal
                             isOpen={modalIsOpen}
                             onAfterOpen={afterOpenModal}
@@ -146,16 +159,16 @@ function Interest() {
                                     <tbody>
                                         <tr>
                                         <td>
-                                            <input type="number" onChange={handleInputTermChange} className="term-input"/>
+                                            <input defaultValue={addIt.term} type="number" onChange={handleInputTermChange} className="term-input"/>
                                         </td>
                                         <td>
-                                            <input type="number" onChange={handleInputPercentChange} className="percent-input"/>
+                                            <input defaultValue={addIt.percent} type="number" onChange={handleInputPercentChange} className="percent-input"/>
                                         </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div>
+                            <div className="edit-button-form">
                                 <button className="save-button" onClick={handelSave}>Save</button>
                                 <button className="close-button" onClick={closeModal}>close</button>
                             </div>
