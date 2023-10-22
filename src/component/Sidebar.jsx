@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div className="p-1   bg-red-200">
-      <Link to="/" className="flex items-center my-2 gap-3">
+    <div className="wrapper p-1  bg-red-200">
+      <Link to="/" className="flex items-center my-2 gap-3 no-underline">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -22,8 +22,8 @@ function Sidebar() {
         Trang chủ
       </Link>
 
-      <div className="bg-gray-100/60 h-[0.05rem] mt-1"></div>
-      <Link to="/interest" className="flex items-center my-2 gap-3">
+      <div className="bg-gray-100/60 h-[0.05rem] mt-1 no-underline"></div>
+      <Link to="/interest" className="flex items-center my-2 gap-3 no-underline">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -41,7 +41,7 @@ function Sidebar() {
         Vay nợ
       </Link>
       <div className="bg-gray-100/60 h-[0.05rem] mt-1"></div>
-      <Link className="flex items-center my-2 gap-3" to="/card">
+      <Link className="flex items-center my-2 gap-3 no-underline" to="/card">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

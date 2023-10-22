@@ -48,6 +48,10 @@
     display: flex;
     justify-content: space-between;
 }
+.edit-button-form{
+    display: flex;
+    justify-content: space-between;
+}
 .term-input{
     border: 1px solid rgb(111, 110, 110);
     border-radius: 1px;
