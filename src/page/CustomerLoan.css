@@ -1,0 +1,13 @@
+.header-loan{
+    border-bottom: 1px solid black;        
+}
+
+.loan{
+    background-color: rgb(133, 141, 155);
+    border-bottom-color: rgb(133, 141, 155);
+    margin-right: 3px;
+    color: white;
+    line-height: 30px;
+    border: 5px solid transparent;
+    text-decoration: none;
+}

@@ -1,0 +1,58 @@
+.header-loan{
+    border-bottom: 1px solid black;        
+}
+
+.loan{
+    background-color: rgb(133, 141, 155);
+    border-bottom-color: rgb(133, 141, 155);
+    margin-right: 3px;
+    color: white;
+    line-height: 30px;
+    border: 5px solid transparent;
+    text-decoration: none;
+}
+.title{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.form-interest{
+    width: 60%;
+}
+.fi-edit{
+    color: rgb(37, 71, 238)
+}
+.ad{
+    font-size: 20px;
+    color: rgb(234, 114, 17);
+}
+.add-interest{
+    margin-top: 10px;
+    margin-left: 5px;
+    font-size: 30px;
+}
+.save-button{
+    color: white;
+    margin-right: 20px;
+    background-color: rgb(36, 130, 51);
+    padding: 2px 10px;
+    border-radius: 3px;
+}
+.close-button{
+    color: white;
+    background-color: rgb(210, 105, 6);
+    padding: 2px 10px;
+    border-radius: 3px;
+}
+.add-button-form{
+    display: flex;
+    justify-content: space-between;
+}
+.term-input{
+    border: 1px solid rgb(111, 110, 110);
+    border-radius: 1px;
+}
+.percent-input{
+    border: 1px solid rgb(111, 110, 110);
+    border-radius: 1px;
+}
