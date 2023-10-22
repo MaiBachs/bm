@@ -1,11 +1,8 @@
 import http from "../utils/http";
 
 const cardApi = {
-  getCardList(params) {
-    return http.post("/credit-card/get-card-by-page", {
-      params,
-    });
-  },
+  getCardList: (data) => http.post("/credit-card/get-card-by-page", data),
+
   getCardLockDetail(id) {
     return http.get(`${"/credit-card/lock-card"}/${id}`);
   },
