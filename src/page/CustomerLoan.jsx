@@ -75,6 +75,25 @@ function CustomerLoan() {
             <li>
               Giới tính: {memoizedCustomerData.sex === "M" ? "Nam" : "Nữ"}
             </li>
+            <li> Vay nợ</li>
+            <li>
+              {" "}
+              Ngày vay nợ : {memoizedCustomerData.loans[0].loanTransactionDate}
+            </li>
+            <li> Hạn trả :{memoizedCustomerData.loans[0].durationInYears} </li>
+            <li>
+              {" "}
+              Số tiền hoàn trả :{
+                memoizedCustomerData.loans[0].loanAmountRepaid
+              }{" "}
+            </li>
+            <li> Đã trả :{memoizedCustomerData.loans[0].loanAmountTaken} </li>
+            <li> Được hoàn trả :{memoizedCustomerData.loans[0].repaid} </li>
+            <li>
+              {" "}
+              Ngày cập nhật mới nhất :
+              {memoizedCustomerData.loans[0].updatedDate}{" "}
+            </li>
           </ul>
         </div>
       )}
