@@ -14,17 +14,17 @@ function CustomerLoan() {
       enabled: !!cmnd,
     }
   );
+
   const handleInputChange = (e) => {
     setCmnd(e.target.value);
   };
+
   const memoizedCustomerData = useMemo(() => {
     if (status === "success" && customer) {
       return customer.data;
     }
     return null;
   }, [status, customer]);
-
-  console.log(customer);
 
   return (
     <div>
@@ -64,36 +64,53 @@ function CustomerLoan() {
         </form>
       </div>
       {memoizedCustomerData && (
-        <div>
-          <h2>Kết quả tìm kiếm</h2>
-          <ul>
-            <li>Tên khách hàng: {memoizedCustomerData.fullName}</li>
-            <li>Số chứng minh nhân dân: {memoizedCustomerData.cmnd}</li>
-            <li>Email: {memoizedCustomerData.email}</li>
-            <li>Ngày sinh : {memoizedCustomerData.dateOfBirth}</li>
-            <li>Quê quán : {memoizedCustomerData.country}</li>
-            <li>
+        <div className="bg-white shadow-lg p-4 mt-4">
+          <h2 className="text-xl font-semibold">Kết quả tìm kiếm</h2>
+          <ul className="list-disc pl-8">
+            <li className="text-gray-700">
+              Tên khách hàng: {memoizedCustomerData.fullName}
+            </li>
+            <li className="text-gray-700">
+              Số chứng minh nhân dân: {memoizedCustomerData.cmnd}
+            </li>
+            <li className="text-gray-700">
+              Email: {memoizedCustomerData.email}
+            </li>
+            <li className="text-gray-700">
+              Ngày sinh: {memoizedCustomerData.dateOfBirth}
+            </li>
+            <li className="text-gray-700">
+              Quê quán: {memoizedCustomerData.country}
+            </li>
+            <li className="text-gray-700">
               Giới tính: {memoizedCustomerData.sex === "M" ? "Nam" : "Nữ"}
             </li>
-            <li> Vay nợ</li>
-            <li>
-              {" "}
-              Ngày vay nợ : {memoizedCustomerData.loans[0].loanTransactionDate}
-            </li>
-            <li> Hạn trả :{memoizedCustomerData.loans[0].durationInYears} </li>
-            <li>
-              {" "}
-              Số tiền hoàn trả :{
-                memoizedCustomerData.loans[0].loanAmountRepaid
-              }{" "}
-            </li>
-            <li> Đã trả :{memoizedCustomerData.loans[0].loanAmountTaken} </li>
-            <li> Được hoàn trả :{memoizedCustomerData.loans[0].repaid} </li>
-            <li>
-              {" "}
-              Ngày cập nhật mới nhất :
-              {memoizedCustomerData.loans[0].updatedDate}{" "}
-            </li>
+            <li className="text-gray-700">Vay nợ :</li>
+            <div className="border-t border-b border-gray-300 p-4 mt-4">
+              <ul className="list-disc pl-8">
+                <li className="text-gray-700">
+                  Ngày vay nợ:{" "}
+                  {memoizedCustomerData.loans[0].loanTransactionDate}
+                </li>
+                <li className="text-gray-700">
+                  Hạn trả: {memoizedCustomerData.loans[0].durationInYears}
+                </li>
+                <li className="text-gray-700">
+                  Số tiền hoàn trả:{" "}
+                  {memoizedCustomerData.loans[0].loanAmountRepaid}
+                </li>
+                <li className="text-gray-700">
+                  Đã trả: {memoizedCustomerData.loans[0].loanAmountTaken}
+                </li>
+                <li className="text-gray-700">
+                  Được hoàn trả: {memoizedCustomerData.loans[0].repaid}
+                </li>
+                <li className="text-gray-700">
+                  Ngày cập nhật mới nhất:{" "}
+                  {memoizedCustomerData.loans[0].updatedDate}
+                </li>
+              </ul>
+            </div>
           </ul>
         </div>
       )}

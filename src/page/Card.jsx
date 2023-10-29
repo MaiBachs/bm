@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import cardApi from "../apis/card.api";
 
 export default function Card() {
+  const [lockedFalseData, setLockedFalseData] = useState([]);
+  const [lockedTrueData, setLockedTrueData] = useState([]);
+
   const { data: lockedTrueDataTab, status: lockedTrueStatus } = useQuery(
     ["cardsLockedTrue"],
     () => {
@@ -16,8 +19,18 @@ export default function Card() {
       return cardApi.getCardList({ locked: false, page: 1, pageSize: 20 });
     }
   );
-  const [lockedFalseData, setLockedFalseData] = useState(lockedTrueDataTab);
-  const [lockedTrueData, setLockedTrueData] = useState(lockedFalseDataTab);
+
+  useEffect(() => {
+    if (lockedTrueStatus === "success" && lockedTrueDataTab) {
+      setLockedTrueData(lockedTrueDataTab.data.creditCards);
+    }
+  }, [lockedTrueStatus, lockedTrueDataTab]);
+
+  useEffect(() => {
+    if (lockedFalseStatus === "success" && lockedFalseDataTab) {
+      setLockedFalseData(lockedFalseDataTab.data.creditCards);
+    }
+  }, [lockedFalseStatus, lockedFalseDataTab]);
 
   const handleToggleLock = (card, isLocked) => {
     // Create a copy of the card with the updated locked state
@@ -25,16 +38,12 @@ export default function Card() {
 
     // Move the card between the two tables
     if (isLocked) {
-      // Remove the card from the unlocked table
       setLockedFalseData((prevData) =>
         prevData.filter((c) => c.id !== card.id)
       );
-      // Add the card to the locked table
       setLockedTrueData((prevData) => [...prevData, updatedCard]);
     } else {
-      // Remove the card from the locked table
       setLockedTrueData((prevData) => prevData.filter((c) => c.id !== card.id));
-      // Add the card to the unlocked table
       setLockedFalseData((prevData) => [...prevData, updatedCard]);
     }
   };
@@ -58,7 +67,7 @@ export default function Card() {
           </thead>
           {/* Table body */}
           <tbody>
-            {lockedTrueData.data.creditCards.map((card) => (
+            {lockedTrueData.map((card) => (
               <tr key={card.id}>
                 <td className="p-2 text-center">{card.id}</td>
                 <td className="p-2 text-center">{card.ccNumber}</td>
@@ -95,7 +104,7 @@ export default function Card() {
           </thead>
           {/* Table body */}
           <tbody>
-            {lockedFalseData.data.creditCards.map((card) => (
+            {lockedFalseData.map((card) => (
               <tr key={card.id}>
                 <td className="p-2 text-center">{card.id}</td>
                 <td className="p-2 text-center">{card.ccNumber}</td>
