@@ -16,6 +16,7 @@ function CustomerLoan({ children }) {
     setSelectedLoan(loan);
     setPayment(0);
     setShowPopover(true);
+    setSelectedLoan();
   };
 
   const closePopover = () => {
@@ -60,6 +61,7 @@ function CustomerLoan({ children }) {
       },
     }
   );
+  const loanCustomerMutation = useMutation();
 
   const handleLoanRepaid = async () => {
     if (selectedLoan && payment > 0 && payment) {
@@ -174,7 +176,7 @@ function CustomerLoan({ children }) {
                         <div className="flex flex-row">
                           <button
                             onClick={() => openPopover(loan)}
-                            className="mt-3 mx-2 bg-blue-300 p-2 border rounded-xl"
+                            className="mt-3 mx-2 bg-blue-400 hover:bg-blue-400/60 p-2 border rounded-xl"
                           >
                             Trả nợ
                           </button>
@@ -214,13 +216,13 @@ function CustomerLoan({ children }) {
                               <div className="flex justify-between mt-4">
                                 <button
                                   onClick={closePopover}
-                                  className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                                  className="bg-blue-500 hover:bg-blue-500/60 text-white py-2 px-4 rounded-lg"
                                 >
                                   Hủy bỏ
                                 </button>
                                 <button
                                   onClick={handleLoanRepaid}
-                                  className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                                  className="bg-blue-500 hover:bg-blue-500/60 text-white py-2 px-4 rounded-lg"
                                 >
                                   Xác nhận
                                 </button>
@@ -235,6 +237,26 @@ function CustomerLoan({ children }) {
               </>
             )}
           </ul>
+          <button
+            onClick={() => openPopover()}
+            className="flex justify-center rounded-sm bg-blue-500 hover:bg-blue-500/60 m-3 p-2"
+          >
+            {" "}
+            Vay mới
+          </button>
+          <PopoverRepaid show={showPopover}>
+            <div className="flex justify-between mt-4 gap-3">
+              <button
+                onClick={closePopover}
+                className="bg-blue-500 hover:bg-blue-500/60 text-white py-2 px-4 rounded-lg"
+              >
+                Hủy bỏ
+              </button>
+              <button className="bg-blue-500 hover:bg-blue-500/60 text-white py-2 px-4 rounded-lg">
+                Xác nhận
+              </button>
+            </div>
+          </PopoverRepaid>
         </div>
       )}
     </div>
