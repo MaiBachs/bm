@@ -7,54 +7,61 @@ export default function Card() {
   const [lockedTrueData, setLockedTrueData] = useState([]);
 
   const { data: lockedTrueDataTab, status: lockedTrueStatus } = useQuery(
-    ["cardsLockedTrue"],
+    ["cardLockedTrue"],
     () => {
       return cardApi.getCardList({ locked: true, page: 1, pageSize: 20 });
     }
   );
 
   const { data: lockedFalseDataTab, status: lockedFalseStatus } = useQuery(
-    ["cardsLockedFalse"],
+    ["cardLockedFalse"],
     () => {
       return cardApi.getCardList({ locked: false, page: 1, pageSize: 20 });
     }
   );
+  const sortCardsById = (cards) => {
+    return cards.slice().sort((a, b) => a.id - b.id);
+  };
 
   useEffect(() => {
     if (lockedTrueStatus === "success" && lockedTrueDataTab) {
-      setLockedTrueData(lockedTrueDataTab.data.creditCards);
+      setLockedTrueData(sortCardsById(lockedTrueDataTab.data.creditCards));
     }
   }, [lockedTrueStatus, lockedTrueDataTab]);
 
   useEffect(() => {
     if (lockedFalseStatus === "success" && lockedFalseDataTab) {
-      setLockedFalseData(lockedFalseDataTab.data.creditCards);
+      setLockedFalseData(sortCardsById(lockedFalseDataTab.data.creditCards));
     }
   }, [lockedFalseStatus, lockedFalseDataTab]);
 
   const handleToggleLock = (card, isLocked) => {
-    // Create a copy of the card with the updated locked state
-    const updatedCard = { ...card, locked: isLocked };
-
-    // Move the card between the two tables
+    const updateCard = { ...card, locked: isLocked };
     if (isLocked) {
       setLockedFalseData((prevData) =>
-        prevData.filter((c) => c.id !== card.id)
+        sortCardsById(prevData.filter((c) => c.id !== card.id))
       );
-      setLockedTrueData((prevData) => [...prevData, updatedCard]);
+      setLockedTrueData((prevData) => sortCardsById([...prevData, updateCard]));
     } else {
-      setLockedTrueData((prevData) => prevData.filter((c) => c.id !== card.id));
-      setLockedFalseData((prevData) => [...prevData, updatedCard]);
+      setLockedTrueData((prevData) =>
+        sortCardsById(prevData.filter((c) => c.id !== card.id))
+      );
+      setLockedFalseData((prevData) =>
+        sortCardsById([...prevData, updateCard])
+      );
+    }
+    if (isLocked) {
+      cardApi.getCardLockDetail(card.id);
+    } else {
+      cardApi.getCardUnLockDetail(card.id);
     }
   };
 
   return (
     <div className="mx-auto p-1 grid grid-cols-2 span-3 gap-4">
-      {/* Bảng thẻ đã khóa */}
       <div className="col-span-1">
         <h2 className="font-bold text-lg mb-2">Thẻ đã khóa</h2>
         <table className="w-full bg-white border border-gray-200 rounded p-3">
-          {/* Table header */}
           <thead>
             <tr>
               <th className="p-2 text-center">ID</th>
@@ -65,7 +72,6 @@ export default function Card() {
               <th className="p-2 text-center">Mở khóa</th>
             </tr>
           </thead>
-          {/* Table body */}
           <tbody>
             {lockedTrueData.map((card) => (
               <tr key={card.id}>
@@ -86,12 +92,9 @@ export default function Card() {
           </tbody>
         </table>
       </div>
-
-      {/* Bảng thẻ đang sử dụng */}
       <div className="col-span-1">
         <h2 className="font-bold text-lg mb-2">Thẻ đang sử dụng</h2>
         <table className="w-full bg-white border border-gray-200 rounded p-3">
-          {/* Table header */}
           <thead>
             <tr>
               <th className="p-2 text-center">ID</th>
@@ -102,7 +105,6 @@ export default function Card() {
               <th className="p-2 text-center">Khóa thẻ</th>
             </tr>
           </thead>
-          {/* Table body */}
           <tbody>
             {lockedFalseData.map((card) => (
               <tr key={card.id}>
