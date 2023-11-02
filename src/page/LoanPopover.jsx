@@ -1,7 +1,7 @@
 import React from "react";
 
-const Popover = ({ show, onClose, children }) => {
-  // if (!show) return null;
+const Popover = ({ show, onClose, children, loan }) => {
+  //   if (!show) return null;
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
