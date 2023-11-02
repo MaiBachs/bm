@@ -6,5 +6,8 @@ const customerApi = {
   },
   loanRepaid: (data) => http.post("/loan/customer-repaid", data),
   loanCustomer: (data) => http.post("/loan/customer-loan", data),
+  getLoanFind() {
+    return http.get("/loan/find-all-interest");
+  },
 };
 export default customerApi;
