@@ -1,11 +1,27 @@
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import "./CustomerLoan.css";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import customerApi from "../apis/customerLoan.api";
+import PopoverRepaid from "./PopoverRepaid";
 
-function CustomerLoan() {
+function CustomerLoan({ children }) {
   const [cmnd, setCmnd] = useState("");
+  const [showPopover, setShowPopover] = useState(false);
+  const [selectedLoan, setSelectedLoan] = useState(null);
+  const [payment, setPayment] = useState(0);
+  const queryClient = useQueryClient();
+
+  const openPopover = (loan) => {
+    setSelectedLoan(loan);
+    setPayment(0);
+    setShowPopover(true);
+  };
+
+  const closePopover = () => {
+    setSelectedLoan(null);
+    setShowPopover(false);
+  };
 
   const { data: customer, status } = useQuery(
     ["customerByCMND", cmnd],
@@ -19,12 +35,53 @@ function CustomerLoan() {
     setCmnd(e.target.value);
   };
 
+  const handlePaymentChange = (e) => {
+    const enteredPayment = parseFloat(e.target.value);
+
+    if (enteredPayment > selectedLoan.repaid) {
+      setPayment(selectedLoan.repaid);
+    } else {
+      setPayment(enteredPayment);
+    }
+  };
+
   const memoizedCustomerData = useMemo(() => {
     if (status === "success" && customer) {
       return customer.data;
     }
     return null;
   }, [status, customer]);
+
+  const loanRepaidMutation = useMutation(
+    (loanData) => customerApi.loanRepaid(loanData),
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries(["customerByCMND", cmnd]);
+      },
+    }
+  );
+
+  const handleLoanRepaid = async () => {
+    if (selectedLoan && payment > 0 && payment) {
+      let newStatus = selectedLoan.status;
+      if (selectedLoan.repaid - payment <= 0) {
+        newStatus = 0;
+      }
+      const currentDate = new Date();
+
+      const updatedLoan = {
+        ...selectedLoan,
+        loanAmountRepaid: selectedLoan.loanAmountRepaid + payment,
+        repaid: selectedLoan.repaid - payment,
+        status: newStatus,
+        payment: 0,
+        updatedDate: currentDate.toISOString(),
+      };
+
+      await loanRepaidMutation.mutateAsync(updatedLoan);
+      closePopover();
+    }
+  };
 
   return (
     <div>
@@ -85,32 +142,98 @@ function CustomerLoan() {
             <li className="text-gray-700">
               Giới tính: {memoizedCustomerData.sex === "M" ? "Nam" : "Nữ"}
             </li>
-            <li className="text-gray-700">Vay nợ :</li>
-            <div className="border-t border-b border-gray-300 p-4 mt-4">
-              <ul className="list-disc pl-8">
-                <li className="text-gray-700">
-                  Ngày vay nợ:{" "}
-                  {memoizedCustomerData.loans[0].loanTransactionDate}
-                </li>
-                <li className="text-gray-700">
-                  Hạn trả: {memoizedCustomerData.loans[0].durationInYears}
-                </li>
-                <li className="text-gray-700">
-                  Số tiền hoàn trả:{" "}
-                  {memoizedCustomerData.loans[0].loanAmountRepaid}
-                </li>
-                <li className="text-gray-700">
-                  Đã trả: {memoizedCustomerData.loans[0].loanAmountTaken}
-                </li>
-                <li className="text-gray-700">
-                  Được hoàn trả: {memoizedCustomerData.loans[0].repaid}
-                </li>
-                <li className="text-gray-700">
-                  Ngày cập nhật mới nhất:{" "}
-                  {memoizedCustomerData.loans[0].updatedDate}
-                </li>
-              </ul>
-            </div>
+            {memoizedCustomerData.loans.length === 0 ? (
+              <li className="text-gray-700">Vay nợ: 0</li>
+            ) : (
+              <>
+                <li className="text-gray-700">Khoản vay:</li>
+                <div className="border-t border-b border-gray-300 p-4 mt-4">
+                  <ul className="list-disc pl-8">
+                    {memoizedCustomerData.loans.map((loan, index) => (
+                      <li key={index}>
+                        <ul>
+                          <li className="text-gray-700 mt-2">
+                            Ngày vay nợ: {loan.loanTransactionDate}
+                          </li>
+                          <li className="text-gray-700">
+                            Hạn trả: {loan.durationInYears}
+                          </li>
+                          <li className="text-gray-700">
+                            Số tiền đã hoàn trả: {loan.loanAmountRepaid}
+                          </li>
+                          <li className="text-gray-700">
+                            Số tiền đã vay: {loan.loanAmountTaken}
+                          </li>
+                          <li className="text-gray-700">
+                            Còn nợ: {loan.repaid}
+                          </li>
+                          <li className="text-gray-700">
+                            Ngày cập nhật mới nhất: {loan.updatedDate}
+                          </li>
+                        </ul>
+                        <div className="flex flex-row">
+                          <button
+                            onClick={() => openPopover(loan)}
+                            className="mt-3 mx-2 bg-blue-300 p-2 border rounded-xl"
+                          >
+                            Trả nợ
+                          </button>
+                          {selectedLoan === loan && (
+                            <PopoverRepaid
+                              show={showPopover}
+                              handleLoanRepaid={handleLoanRepaid}
+                            >
+                              <ul>
+                                <li className="text-gray-700 mt-2">
+                                  Ngày vay nợ: {loan.loanTransactionDate}
+                                </li>
+                                <li className="text-gray-700">
+                                  Hạn trả: {loan.durationInYears}
+                                </li>
+                                <li className="text-gray-700">
+                                  Số tiền đã hoàn trả: {loan.loanAmountRepaid}
+                                </li>
+                                <li className="text-gray-700">
+                                  Số tiền đã vay: {loan.loanAmountTaken}
+                                </li>
+                                <li className="text-gray-700">
+                                  Còn nợ: {loan.repaid}
+                                </li>
+                                <li className="text-gray-700">
+                                  Số tiền muốn trả:
+                                  <input
+                                    type="number"
+                                    onChange={handlePaymentChange}
+                                    className=" border rounded-sm border-black-400 border-spacing-3 mx-2"
+                                  />
+                                </li>
+                                <li className="text-gray-700">
+                                  Ngày cập nhật mới nhất: {loan.updatedDate}
+                                </li>
+                              </ul>
+                              <div className="flex justify-between mt-4">
+                                <button
+                                  onClick={closePopover}
+                                  className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                                >
+                                  Hủy bỏ
+                                </button>
+                                <button
+                                  onClick={handleLoanRepaid}
+                                  className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                                >
+                                  Xác nhận
+                                </button>
+                              </div>
+                            </PopoverRepaid>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
           </ul>
         </div>
       )}
