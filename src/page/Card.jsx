@@ -81,11 +81,11 @@ export default function Card() {
                 <td className="p-2 text-center">{card.expiryDate}</td>
                 <td className="p-2 text-center">{card.creditScore}</td>
                 <td className="p-2 text-center">
-                  <input
-                    type="checkbox"
+                  <button 
+                    style={{backgroundColor: "green", color:"white", width:  60, height: 30, borderRadius: 3}}
                     checked={card.locked}
-                    onChange={() => handleToggleLock(card, false)}
-                  />
+                    onClick={() => handleToggleLock(card, false)}
+                  >Unlock</button>
                 </td>
               </tr>
             ))}
@@ -114,11 +114,11 @@ export default function Card() {
                 <td className="p-2 text-center">{card.expiryDate}</td>
                 <td className="p-2 text-center">{card.creditScore}</td>
                 <td className="p-2 text-center">
-                  <input
-                    type="checkbox"
+                  <button
+                    style={{backgroundColor: "red", color:"white", width:  60, height: 30, borderRadius: 3}}
                     checked={card.locked}
-                    onChange={() => handleToggleLock(card, true)}
-                  />
+                    onClick={() => handleToggleLock(card, true)}
+                  >Lock</button>
                 </td>
               </tr>
             ))}
