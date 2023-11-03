@@ -154,8 +154,8 @@ function Interest() {
               return (
                 <tr className="interest">
                   <td>{index}</td>
-                  <td>{i.term}</td>
-                  <td>{i.percent}</td>
+                  <td>{i.term}(month)</td>
+                  <td>{i.percent}%</td>
                   <td>
                     <FiEdit
                       className="fi-edit"

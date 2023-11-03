@@ -312,7 +312,7 @@ function CustomerLoan({ children }) {
                     {findInterest.data.map((item) => (
                       <tr key={item.id}>
                         <td className="p-2 text-center">{item.id}</td>
-                        <td className="p-2 text-center">{item.term}</td>
+                        <td className="p-2 text-center">{item.term}(month)</td>
                         <td className="p-2 text-center">{item.percent}%</td>
                         <td className="p-2 text-center">
                           <input type="radio" name="interest" style={{width: 17, height: 17}}
