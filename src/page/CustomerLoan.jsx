@@ -107,24 +107,32 @@ function CustomerLoan({ children }) {
     setSelectedLoan(null);
   }, [cmnd]);
 
-  async function handleVayMoi(interestId) {
-    setSelectInterestId(interestId);
-    if (memoizedCustomerData) {
-      const newLoan = {
-        customerId: memoizedCustomerData.id,
-        interestId: interestId,
-        loanAmountTaken: loanAmountTaken,
-      };
-
-      try {
-        const response = await customerApi.loanCustomer(newLoan);
-
-        console.log("New loan created:", response);
-        queryClient.invalidateQueries("customerByCMND");
-
-        closeLoanPopover();
-      } catch (error) {
-        console.error("Error creating a new loan:", error);
+  async function handleVayMoi() {
+    if(selectIntersestId.length === ""){
+      alert("Bắt buộc chọn kì hạn khi thực hiện vay")
+    }else if(loanAmountTaken === 0){
+      alert("Bắt buộc nhập số tiền khi thực hiện vay")
+    }else{
+      if (memoizedCustomerData) {
+        const newLoan = {
+          customerId: memoizedCustomerData.id,
+          interestId: selectIntersestId,
+          loanAmountTaken: loanAmountTaken,
+        };
+  
+        try {
+          const response = await customerApi.loanCustomer(newLoan);
+  
+          console.log("New loan created:", response);
+          queryClient.invalidateQueries("customerByCMND");
+  
+          closeLoanPopover();
+        } catch (error) {
+          console.error("Error creating a new loan:", error);
+        } finally{
+          setSelectInterestId("")
+          setLoanAmountTaken(0)
+        }
       }
     }
   }
@@ -194,7 +202,7 @@ function CustomerLoan({ children }) {
               <>
                 <li className="text-gray-700">Khoản vay:</li>
                 <div className="border-t border-b border-gray-300 p-4 mt-4">
-                  <ul className="list-disc pl-8">
+                  <ul className="list-disc pl-8" style={{listStyleType: "none"}}>
                     {memoizedCustomerData.loans.map((loan, index) => (
                       <li key={index}>
                         <ul>
@@ -305,27 +313,13 @@ function CustomerLoan({ children }) {
                       <tr key={item.id}>
                         <td className="p-2 text-center">{item.id}</td>
                         <td className="p-2 text-center">{item.term}</td>
-                        <td className="p-2 text-center">{item.percent}</td>
+                        <td className="p-2 text-center">{item.percent}%</td>
                         <td className="p-2 text-center">
-                          <button
+                          <input type="radio" name="interest" style={{width: 17, height: 17}}
                             className="bg-gray-400 p-1 rounded-sm"
-                            onClick={() => handleVayMoi(item.id)}
+                            onClick={() => setSelectInterestId(item.id)}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="w-6 h-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 6v12m6-6H6"
-                              />
-                            </svg>
-                          </button>
+                          </input>
                         </td>
                       </tr>
                     ))}
@@ -359,10 +353,10 @@ function CustomerLoan({ children }) {
                   onChange={(e) => setLoanAmountTaken(e.target.value)}
                   className="border rounded-sm border-black-400 border-spacing-3 mx-2"
                 />
-                <li className="text-gray-700">
+                {/* <li className="text-gray-700">
                   {" "}
                   Phương thức vay nợ :{setSelectInterestId}
-                </li>
+                </li> */}
               </ul>
               <div className="flex justify-between mt-4 gap-3">
                 <button
